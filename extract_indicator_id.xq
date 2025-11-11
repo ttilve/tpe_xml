@@ -1,7 +1,10 @@
 xquery version "3.1";
 
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare option output:method "text";
+
 (: === FUNCIÓN RECURSIVA === :)
-declare function local:search($nodes as item()*) as xs:integer* {
+declare function local:search($nodes as item()*, $prefix as xs:string) as xs:integer* {
   for $node in ($nodes?*)
   where $node instance of map(*)
   let $name := lower-case($node?name)
@@ -15,7 +18,7 @@ declare function local:search($nodes as item()*) as xs:integer* {
       $id
     else (),
     if (exists($children)) then
-      local:search($children)
+      local:search($children, $prefix)
     else ()
   )
 };
@@ -25,11 +28,11 @@ declare variable $prefix as xs:string external;
 
 let $json := json-doc("data/indicators.json")
 let $root := $json?body?children
-let $ids := local:search($root)
+let $ids := local:search($root, $prefix)
 let $max_id := if (exists($ids)) then max($ids) else ()
 
 return
   if (exists($max_id)) then
-    xs:string($max_id)
+    string($max_id)
   else
     ""

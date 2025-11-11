@@ -32,6 +32,22 @@ fi
 
 echo "ID encontrado: $ID"
 
+#echo "Buscando ID para: '$PREFIX'"
+#ID=$(java -cp "$SAXON" net.sf.saxon.Query \
+#  -q:extract_indicator_id.xq \
+#  prefix="$PREFIX" 2>/dev/null)
+
+# Eliminar encabezado XML y espacios
+#ID=$(echo "$ID" | tr -d '\n\r ' | sed 's/^.*?>//')
+
+#if [ -z "$ID" ]; then
+#  echo "Error: No se encontró indicador con prefijo '$PREFIX'"
+#  echo '<indicator_data><error>No indicator found</error></indicator_data>' > "$DATA/indicator_data.xml"
+#  exit 1
+#fi
+
+#echo "ID encontrado: $ID"
+
 echo "Descargando dimensions.xml..."
 curl -f -k -X GET \
   "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/dimensions?lang=en&format=xml&in=1&path=0" \
@@ -41,6 +57,7 @@ echo "Descargando records.xml..."
 curl -f -k -X GET \
   "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/records?lang=en&format=xml" \
   -o "$DATA/records.xml" || exit 1
+
 
 echo "Generando indicator_data.xml..."
 java -cp "$SAXON" net.sf.saxon.Query \
