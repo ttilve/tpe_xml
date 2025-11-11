@@ -48,6 +48,10 @@ echo "ID encontrado: $ID"
 
 #echo "ID encontrado: $ID"
 
+echo "Descargando metadata.xml..."
+curl -s "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/metadata?lang=en&format=xml" \
+  -o "$DATA/metadata.xml"
+
 echo "Descargando dimensions.xml..."
 curl -f -k -X GET \
   "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/dimensions?lang=en&format=xml&in=1&path=0" \
@@ -57,6 +61,7 @@ echo "Descargando records.xml..."
 curl -f -k -X GET \
   "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/records?lang=en&format=xml" \
   -o "$DATA/records.xml" || exit 1
+
 
 
 #echo "Generando indicator_data.xml..."
