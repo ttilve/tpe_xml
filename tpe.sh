@@ -59,10 +59,26 @@ curl -f -k -X GET \
   -o "$DATA/records.xml" || exit 1
 
 
+#echo "Generando indicator_data.xml..."
+#java -cp "$SAXON" net.sf.saxon.Query \
+#  -q:extract_indicator_data.xq \
+#  indicator_id="$ID" > "$DATA/indicator_data.xml"
+
+#echo "Generando indicator_page.md..."
+#java -cp "$SAXON" net.sf.saxon.Transform \
+#  -s:"$DATA/indicator_data.xml" \
+#  -xsl:generate_markdown.xsl \
+#  -o:"$DATA/indicator_page.md"
+
+#echo "¡Listo! Revisa: $DATA/indicator_page.md"
+
 echo "Generando indicator_data.xml..."
 java -cp "$SAXON" net.sf.saxon.Query \
   -q:extract_indicator_data.xq \
-  indicator_id="$ID" > "$DATA/indicator_data.xml"
+  indicator_id="$ID" \
+  !method=xml \
+  !indent=yes \
+  !omit-xml-declaration=no > "$DATA/indicator_data.xml"
 
 echo "Generando indicator_page.md..."
 java -cp "$SAXON" net.sf.saxon.Transform \

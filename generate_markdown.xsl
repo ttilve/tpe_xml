@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="text"/>
@@ -28,13 +27,14 @@
       <xsl:text>--- |&#10;</xsl:text>
 
       <xsl:for-each select="data/record">
+        <xsl:variable name="current-record" select="."/>
         <xsl:text>| </xsl:text>
         <xsl:for-each select="$headers">
           <xsl:variable name="h" select="."/>
-          <xsl:value-of select="dimension[name = $h]/value"/>
+          <xsl:value-of select="$current-record/dimension[name = $h]/value"/>
           <xsl:text> | </xsl:text>
         </xsl:for-each>
-        <xsl:value-of select="value"/>
+        <xsl:value-of select="$current-record/value"/>
         <xsl:text> |&#10;</xsl:text>
       </xsl:for-each>
     </xsl:if>
