@@ -19,6 +19,8 @@ curl -f -k -X GET \
   exit 1
 }
 
+echo ""
+
 echo "Searching ID for: '$PREFIX'"
 ID=$(java -cp "$SAXON" net.sf.saxon.Query \
   -q:extract_indicator_id.xq \
@@ -31,6 +33,7 @@ if [ -z "$ID" ] || [ "$ID" = "" ]; then
 fi
 
 echo "ID found: $ID"
+echo ""
 
 echo "Downloading metadata.xml..."
 curl -s "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/metadata?lang=en&format=xml" \
@@ -45,6 +48,8 @@ echo "Downloading records.xml..."
 curl -f -k -X GET \
   "https://api-cepalstat.cepal.org/cepalstat/api/v1/indicator/${ID}/records?lang=en&format=xml" \
   -o "$DATA/records.xml" || exit 1
+
+echo ""
 
 echo "Generating indicator_data.xml..."
 java -cp "$SAXON" net.sf.saxon.Query \
