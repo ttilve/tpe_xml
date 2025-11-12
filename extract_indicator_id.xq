@@ -3,13 +3,13 @@ xquery version "3.1";
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare option output:method "text";
 
-(: === LÓGICA PRINCIPAL === :)
+
 declare variable $prefix as xs:string external;
 
 let $json := json-doc("data/indicators.json")
 let $root := $json?body?children
 
-(: Recolectar todos los nodos en una secuencia plana :)
+
 let $all-nodes :=
   let $queue := $root?*
   return (
@@ -21,7 +21,7 @@ let $all-nodes :=
     $queue?children?*?children?*?children?*?children?*?children?*
   )
 
-(: Filtrar y extraer IDs :)
+
 let $ids := 
   for $node in $all-nodes
   where $node instance of map(*)
